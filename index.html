@@ -2,145 +2,141 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#6C5CE7">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0820">
 <title>QuizNova</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%236C5CE7'/><text x='50' y='68' font-size='55' text-anchor='middle'>🚀</text></svg>">
 <style>
-:root{--bg:#f4f3ff;--card:#fff;--text:#1e1b3a;--muted:#6b6890;--ok:#22a06b;--bad:#e5484d;--line:#e2e0f5}
-@media(prefers-color-scheme:dark){:root{--bg:#15132b;--card:#221f42;--text:#f1f0ff;--muted:#a9a6cf;--line:#38345f}}
+:root{--bg:#0b0820;--bg2:#1f1456;--card:#15113a;--tx:#f2f0ff;--mu:#9d99cf;--a:#a855f7;--b:#22d3ee;--ok:#16a34a;--bad:#dc2626;--ln:#2e2866}
+[data-t=sunset]{--bg:#1c0a14;--bg2:#4a1230;--card:#2a1020;--a:#fb7185;--b:#fbbf24;--ln:#5a2440}
+[data-t=forest]{--bg:#06150f;--bg2:#0b3a2a;--card:#0e2a1f;--a:#22c55e;--b:#a3e635;--ln:#1b5a40}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-.app{max-width:480px;margin:0 auto;padding:20px 16px 32px}
-h1{margin:8px 0 4px;font-size:30px}
-.sub{color:var(--muted);margin:0 0 20px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.cat{border:0;border-radius:20px;padding:22px 12px;color:#fff;font-size:17px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:transform .12s}
-.cat:active{transform:scale(.95)}
-.cat span{font-size:38px}
-.cat:last-child:nth-child(odd){grid-column:1/-1}
-.top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-weight:600;margin-bottom:10px}
-.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin-bottom:22px}
-.bar i{display:block;height:100%;width:0;background:var(--c,#6C5CE7);transition:width .3s}
-.q{background:var(--card);border-radius:20px;padding:22px;font-size:20px;font-weight:700;line-height:1.35;margin-bottom:16px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
-.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--text);border:2px solid var(--line);border-radius:16px;padding:16px;font-size:17px;margin-bottom:10px;cursor:pointer}
-.opt:active{transform:scale(.98)}
-.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
-.opt.bad{background:var(--bad);border-color:var(--bad);color:#fff}
-.opt:disabled{cursor:default}
-.fb{min-height:26px;font-weight:700;text-align:center;margin:6px 0 10px}
-.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font-size:18px;font-weight:700;color:#fff;background:#6C5CE7;cursor:pointer;margin-top:10px}
-.btn.alt{background:transparent;color:var(--text);border:2px solid var(--line)}
-.res{text-align:center;padding-top:30px}
-.big{font-size:72px;margin:0}
-.score{font-size:56px;font-weight:800;margin:6px 0}
+body{margin:0;font-family:system-ui,Roboto,sans-serif;background:radial-gradient(circle at 20% 0,var(--bg2),var(--bg) 60%) fixed;color:var(--tx);min-height:100vh}
+#app{max-width:560px;margin:0 auto;padding:16px 14px 100px;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.na *{animation:none!important;transition:none!important}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+h1,h2,h3{margin:8px 0}
+small,.lab{color:var(--mu)}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font-weight:800;font-size:17px;color:#fff;background:linear-gradient(90deg,var(--a),var(--b));box-shadow:0 0 22px rgba(168,85,247,.45);cursor:pointer;margin:12px 0}
+.btn.alt{background:transparent;border:2px solid var(--ln);box-shadow:none}
+.btn.red{background:var(--bad);box-shadow:none}
+.btn:disabled{opacity:.5}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:14px;margin:12px 0}
+.hd{display:flex;align-items:center;gap:12px}
+.hd>div:nth-child(2){flex:1}
+.av{width:56px;height:56px;border-radius:50%;border:3px solid var(--ln);display:grid;place-items:center;font-size:30px;background:var(--card)}
+.coin{font-weight:800;background:var(--card);border:1px solid var(--ln);padding:8px 12px;border-radius:20px}
+.chip{display:inline-block;padding:4px 10px;border-radius:14px;background:var(--card);border:1px solid var(--rc,var(--ln));color:var(--rc,var(--tx));font-size:13px;font-weight:700;margin:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stats div{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:10px;text-align:center}
+.stats b{display:block;font-size:20px;color:var(--b)}
+.bar{height:10px;background:var(--ln);border-radius:10px;overflow:hidden;margin:6px 0 10px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--b));transition:width .5s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px 6px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat span{font-size:32px}
+.cat:active{transform:scale(.95);border-color:var(--b)}
+.qh{display:flex;flex-wrap:wrap;gap:4px;justify-content:space-between}
+.t0{color:#4ade80}.t1{color:#22d3ee}.t2{color:#facc15}.t3{color:#fb923c}.t4{color:#f472b6}
+.q{background:var(--card);border:1px solid var(--ln);border-radius:20px;padding:20px;font-size:20px;font-weight:700;line-height:1.35;margin:10px 0;text-align:center}
+.q .em{font-size:44px;display:block}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:2px solid var(--ln);border-radius:16px;padding:15px;font-size:17px;margin-bottom:10px;cursor:pointer}
+.opt b{background:var(--ln);border-radius:8px;width:28px;height:28px;display:grid;place-items:center;flex:none}
+.opt.ok{background:var(--ok);border-color:var(--ok)}
+.opt.bad{background:var(--bad);border-color:var(--bad)}
+.fb{text-align:center;font-weight:800;margin:8px 0}
+.row{display:flex;align-items:center;gap:12px}
+.row>div{flex:1}
+.row .btn{width:auto;margin:0;padding:10px 14px;font-size:15px}
+input[type=text],select{width:100%;background:var(--card);border:2px solid var(--ln);border-radius:12px;padding:12px;margin:6px 0 12px}
+#nav{position:fixed;left:0;right:0;bottom:0;display:none;background:var(--card);border-top:1px solid var(--ln);padding:6px 6px calc(6px + env(safe-area-inset-bottom));justify-content:space-around}
+#nav button{background:none;border:0;padding:6px 12px;border-radius:12px;color:var(--mu);font-size:12px;cursor:pointer}
+#nav button span{display:block;font-size:22px}
+#nav .on{color:var(--b);background:var(--bg2)}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;place-items:center;z-index:9;padding:20px}
+#modal.on{display:grid}
+.mb{background:var(--card);border:2px solid var(--b);border-radius:22px;padding:22px;text-align:center;max-width:340px;width:100%;box-shadow:0 0 40px var(--a);animation:fi .3s}
+.big{font-size:64px}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--a);color:#fff;padding:10px 16px;border-radius:20px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s;z-index:10;max-width:90%;text-align:center}
+#toast.on{opacity:1}
 </style>
 </head>
 <body>
-<div class="app" id="app"></div>
+<main id="app"></main>
+<nav id="nav" aria-label="Main navigation">
+<button data-a="go" data-v="home"><span>🏠</span>Home</button>
+<button data-a="go" data-v="ranks"><span>🏆</span>Ranks</button>
+<button data-a="go" data-v="prof"><span>👤</span>Profile</button>
+</nav>
+<div id="modal" role="dialog" aria-modal="true"></div>
+<div id="toast" role="status"></div>
 <script>
-// Each question: [question, correct answer, wrong1, wrong2, wrong3]
-const CATS=[
-{name:"Science",icon:"🔬",color:"#6C5CE7",qs:[
-["Which planet is known as the Red Planet?","Mars","Venus","Jupiter","Mercury"],
-["What is the chemical symbol for water?","H₂O","CO₂","O₂","NaCl"],
-["Which gas do plants absorb from the air?","Carbon dioxide","Oxygen","Nitrogen","Helium"],
-["What is the hardest natural substance?","Diamond","Gold","Iron","Quartz"],
-["How many bones are in an adult human body?","206","180","250","300"]]},
-{name:"Geography",icon:"🌍",color:"#00A884",qs:[
-["What is the capital of France?","Paris","Rome","Madrid","Berlin"],
-["Which is the largest ocean?","Pacific","Atlantic","Indian","Arctic"],
-["Which is the largest country by area?","Russia","Canada","China","USA"],
-["Mount Everest is in which mountain range?","Himalayas","Alps","Andes","Rockies"],
-["What is the capital of Japan?","Tokyo","Seoul","Beijing","Bangkok"]]},
-{name:"History",icon:"🏛️",color:"#E17055",qs:[
-["Who was the first US president?","George Washington","Abraham Lincoln","Thomas Jefferson","John Adams"],
-["The pyramids of Giza are in which country?","Egypt","Mexico","Iraq","Peru"],
-["In which year did World War II end?","1945","1939","1918","1950"],
-["Who sailed to the Americas in 1492?","Christopher Columbus","Marco Polo","Vasco da Gama","James Cook"],
-["Which language was spoken in ancient Rome?","Latin","Greek","Arabic","Sanskrit"]]},
-{name:"Technology",icon:"💻",color:"#0984E3",qs:[
-["What does HTML stand for?","HyperText Markup Language","High Tech Modern Language","Home Tool Markup Language","Hyper Transfer Mode Link"],
-["Which company develops Android?","Google","Apple","Microsoft","Nokia"],
-["What does CPU stand for?","Central Processing Unit","Computer Power Unit","Central Program Utility","Core Phone Unit"],
-["What animal is the Linux mascot?","Penguin","Fox","Dolphin","Owl"],
-["How many bits are in one byte?","8","4","16","10"]]},
-{name:"Fun Facts",icon:"🎉",color:"#D63384",qs:[
-["How many days are in a leap year?","366","365","364","367"],
-["How many colors are in a rainbow?","7","5","6","8"],
-["What is the largest mammal?","Blue whale","Elephant","Giraffe","Hippo"],
-["How many sides does a hexagon have?","6","5","7","8"],
-["What is the fastest land animal?","Cheetah","Lion","Horse","Leopard"]]}
-];
-
-const app=document.getElementById("app");
-let cat,list,idx,score,locked;
-
-const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-
-function home(){
-  app.innerHTML=`<h1>🚀 QuizNova</h1><p class="sub">Pick a category and test yourself!</p>
-  <div class="grid">${CATS.map((c,i)=>`<button class="cat" style="background:${c.color}" onclick="start(${i})"><span>${c.icon}</span>${c.name}</button>`).join("")}</div>`;
-}
-
-function start(i){
-  cat=CATS[i];
-  list=shuffle(cat.qs);
-  idx=0;score=0;
-  show();
-}
-
-function show(){
-  locked=false;
-  const [q,right,...wrong]=list[idx];
-  const opts=shuffle([right,...wrong]);
-  app.style.setProperty("--c",cat.color);
-  app.innerHTML=`<div class="top"><span>${cat.icon} ${cat.name}</span><span>Question ${idx+1}/${list.length}</span></div>
-  <div class="bar"><i style="width:${idx/list.length*100}%"></i></div>
-  <div class="q"></div>
-  <div id="opts"></div><div class="fb" id="fb"></div><div id="nx"></div>`;
-  app.querySelector(".q").textContent=q;
-  const box=document.getElementById("opts");
-  opts.forEach(o=>{
-    const b=document.createElement("button");
-    b.className="opt";b.textContent=o;
-    b.onclick=()=>answer(b,o===right,right);
-    box.appendChild(b);
-  });
-  requestAnimationFrame(()=>app.querySelector(".bar i").style.width=((idx+1)/list.length*100)+"%");
-}
-
-function answer(btn,correct,right){
-  if(locked)return;
-  locked=true;
-  document.querySelectorAll(".opt").forEach(b=>{
-    b.disabled=true;
-    if(b.textContent===right)b.classList.add("ok");
-  });
-  const fb=document.getElementById("fb");
-  if(correct){score++;fb.textContent="✅ Correct!";fb.style.color="var(--ok)";if(navigator.vibrate)navigator.vibrate(40)}
-  else{btn.classList.add("bad");fb.textContent="❌ Wrong! The answer is: "+right;fb.style.color="var(--bad)";if(navigator.vibrate)navigator.vibrate([60,40,60])}
-  const last=idx===list.length-1;
-  document.getElementById("nx").innerHTML=`<button class="btn" style="background:${cat.color}" onclick="next()">${last?"See Score 🏁":"Next Question →"}</button>`;
-}
-
-function next(){
-  idx++;
-  idx<list.length?show():result();
-}
-
-function result(){
-  const pct=score/list.length;
-  const [emoji,msg]=pct===1?["🏆","Perfect! You're a QuizNova champion!"]:pct>=.6?["🎉","Great job!"]:pct>=.4?["👍","Not bad, keep practicing!"]:["📚","Keep learning, you'll get there!"];
-  app.innerHTML=`<div class="res"><p class="big">${emoji}</p><h1>Quiz Complete</h1><p class="sub">${cat.name} • ${msg}</p>
-  <div class="score" style="color:${cat.color}">${score} / ${list.length}</div>
-  <p class="sub">${Math.round(pct*100)}% correct</p>
-  <button class="btn" style="background:${cat.color}" onclick="start(CATS.indexOf(cat))">🔄 Play Again</button>
-  <button class="btn alt" onclick="home()">🏠 Choose Another Category</button></div>`;
-}
-
-home();
+(()=>{
+"use strict";
+const KEY="quiznova_save_v1",$=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const LANGS={en:"English",hi:"हिन्दी (Hindi)",bn:"বাংলা (Bengali)",es:"Español",fr:"Français"};
+const COUNTRIES=["India","United States","United Kingdom","Bangladesh","Spain","France","Mexico","Canada","Australia","Other"];
+const CATS={sci:["Science","🔬"],geo:["Geography","🌍"],his:["History","🏛️"],tec:["Technology","💻"],mat:["Mathematics","➗"],gk:["General Knowledge","🧠"],ani:["Animals","🦁"],spc:["Space","🚀"],spo:["Sports","⚽"],ent:["Entertainment","🎬"]};
+const TIERS=["Easy","Medium","Hard","Expert","Master"],XPT=[10,20,35,55,80],COINT=[5,10,15,25,40];
+const RANKS=[["Bronze","🥉","#cd7f32",0,0],["Silver","🥈","#cbd5e1",500,100],["Gold","🥇","#facc15",1500,250],["Platinum","💠","#67e8f9",4000,500],["Diamond","💎","#60a5fa",9000,1000],["Master","👑","#c084fc",18000,2000],["God","⚡","#f472b6",35000,5000]];
+const BANK={
+sci:[[0,"What gas do humans need to breathe to survive?","Oxygen","Helium","Hydrogen","Neon","🫁"],[1,"What is the powerhouse of the cell?","Mitochondria","Nucleus","Ribosome","Chloroplast","🧬"],[2,"What is the atomic number of carbon?","6","12","8","14","⚛️"],[3,"Which particle carries a negative electric charge?","Electron","Proton","Neutron","Photon","🔋"],[4,"What is the SI unit of electrical resistance?","Ohm","Volt","Watt","Farad","⚡"]],
+geo:[[0,"What is the capital of Italy?","Rome","Milan","Venice","Naples","🇮🇹"],[1,"What is the capital of Australia?","Canberra","Sydney","Melbourne","Perth","🦘"],[2,"Which is the longest river in South America?","Amazon","Orinoco","Paraná","Magdalena","🌊"],[3,"Lake Baikal is located in which country?","Russia","Mongolia","Kazakhstan","China","🏞️"],[4,"What is the capital of Burkina Faso?","Ouagadougou","Bamako","Niamey","Accra","🌍"]],
+his:[[0,"Who was the first president of the United States?","George Washington","Abraham Lincoln","Thomas Jefferson","John Adams","🇺🇸"],[1,"In which year did World War II end?","1945","1939","1918","1950","🕊️"],[2,"Which civilization built Machu Picchu?","Inca","Aztec","Maya","Olmec","⛰️"],[3,"In which year was the Magna Carta sealed?","1215","1066","1492","1315","📜"],[4,"Who was the first emperor of unified China?","Qin Shi Huang","Kublai Khan","Liu Bang","Sun Yat-sen","🏯"]],
+tec:[[0,"What does CPU stand for?","Central Processing Unit","Computer Power Unit","Central Program Utility","Core Phone Unit","🖥️"],[1,"What does CSS stand for?","Cascading Style Sheets","Computer Style Syntax","Creative Style System","Colorful Style Sheets","🎨"],[2,"Which data structure follows LIFO order?","Stack","Queue","Array","Graph","📚"],[3,"What is the time complexity of binary search?","O(log n)","O(n)","O(n²)","O(1)","🔍"],[4,"Which sorting algorithm uses a pivot and divide-and-conquer?","Quick sort","Bubble sort","Insertion sort","Selection sort","🧮"]],
+mat:[[0,"How many sides does a hexagon have?","6","5","7","8","⬡"],[1,"What is pi to two decimal places?","3.14","3.12","3.41","3.16","🥧"],[2,"What is the square root of 144?","12","14","11","16","√"],[3,"What is the sum of the angles in a triangle?","180°","90°","360°","270°","📐"],[4,"What is the derivative of x²?","2x","x","x²","2","📈"]],
+gk:[[0,"How many days are in a leap year?","366","365","364","367","📅"],[1,"What is the smallest prime number?","2","1","3","0","🔢"],[2,"Which element has the chemical symbol Au?","Gold","Silver","Argon","Aluminium","🥇"],[3,"In which year did the Berlin Wall fall?","1989","1991","1985","1979","🧱"],[4,"Which language has the most native speakers?","Mandarin Chinese","English","Spanish","Hindi","🗣️"]],
+ani:[[0,"What is the largest animal on Earth?","Blue whale","African elephant","Giraffe","Great white shark","🐋"],[1,"How many legs does a spider have?","8","6","10","4","🕷️"],[2,"What is a baby kangaroo called?","Joey","Cub","Calf","Pup","🦘"],[3,"Which mammal lays eggs?","Platypus","Bat","Otter","Dolphin","🦆"],[4,"How many hearts does an octopus have?","3","1","2","4","🐙"]],
+spc:[[0,"Which planet is known as the Red Planet?","Mars","Venus","Jupiter","Mercury","🔴"],[1,"What is the closest star to Earth?","The Sun","Proxima Centauri","Sirius","Betelgeuse","☀️"],[2,"What is the largest planet in our solar system?","Jupiter","Saturn","Neptune","Earth","🪐"],[3,"Which moon of Saturn has a thick nitrogen atmosphere?","Titan","Europa","Ganymede","Io","🌙"],[4,"What is the speed of light in a vacuum (approx.)?","299,792 km/s","150,000 km/s","30,000 km/s","1,000,000 km/s","💡"]],
+spo:[[0,"How many players does one soccer team have on the field?","11","9","10","12","⚽"],[1,"In which sport do you perform a slam dunk?","Basketball","Volleyball","Tennis","Cricket","🏀"],[2,"How many rings are on the Olympic flag?","5","4","6","7","🏅"],[3,"Which country won the first FIFA World Cup in 1930?","Uruguay","Brazil","Argentina","Italy","🏆"],[4,"How long is a marathon (approx.)?","42.195 km","40 km","21.1 km","50 km","🏃"]],
+ent:[[0,"Which animated film features a lion named Simba?","The Lion King","Madagascar","Bambi","Tarzan","🦁"],[1,"Who wrote the play Romeo and Juliet?","William Shakespeare","Charles Dickens","Mark Twain","Jane Austen","🎭"],[2,"Which instrument has 88 keys?","Piano","Guitar","Violin","Flute","🎹"],[3,"Who directed the 1993 film Jurassic Park?","Steven Spielberg","James Cameron","George Lucas","Ridley Scott","🦖"],[4,"Which composer wrote The Four Seasons?","Antonio Vivaldi","Mozart","Beethoven","Bach","🎻"]]
+};
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const STATIC=[];
+for(const c in BANK)BANK[c].forEach((r,i)=>STATIC.push({id:c+"-"+(i+1),c,t:r[0],q:r[1],a:r[2],w:r.slice(3,6),e:r[6]}));
+const DEF=()=>({v:1,setup:false,name:"Player",lang:"en",country:"Other",xp:0,coins:0,score:0,correct:0,answered:0,streak:0,done:[],paid:[],rk:[0],last:"",snd:true,anim:true});
+let S,done,paid,scr="setup",lastScr="",cur=null,opts=[],fb=null,lock=false,catSel="mix",cleanMsg="",tt,ac;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.v===1&&Array.isArray(o.done)&&Array.isArray(o.paid))return {...DEF(),...o}}}catch(e){}return DEF()}
+const rebuild=()=>{done=new Set(S.done);paid=new Set(S.paid)};
+const need=l=>100+40*(l-1);
+function info(){let l=1,r=S.xp;while(r>=need(l)){r-=need(l);l++}return{l,r,n:need(l)}}
+const rankIdx=()=>{let k=0;RANKS.forEach((r,i)=>{if(S.xp>=r[3])k=i});return k};
+const fmt=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const cd=()=>{const n=new Date(),m=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n;return Math.floor(m/36e5)+"h "+Math.floor(m%36e5/6e4)+"m"};
+const bar=p=>`<div class="bar"><i style="width:${(Math.min(1,Math.max(0,p))*100).toFixed(1)}%"></i></div>`;
+const chip=i=>{const r=RANKS[i];return `<span class="chip" style="--rc:${r[2]}">${r[1]} ${r[0]}</span>`};
+const av=()=>`<div class="av">😎</div>`;
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on"),2500)};
+function beep(ok){if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=ok?740:200;g.gain.value=.08;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.15)}catch(e){}}
+function pop(i,t,b){const m=$("#modal");m.innerHTML=`<div class="mb"><div class="big">${i}</div><h2>${esc(t)}</h2><p>${esc(b)}</p><button class="btn" data-a="ok">OK</button></div>`;m.classList.add("on")}
+function closePop(){$("#modal").classList.remove("on")}
+function award(x,c){const old=info().l;S.xp+=x;S.coins+=c;const now=info().l;for(let l=old+1;l<=now;l++)S.coins+=20+l*2;RANKS.forEach((r,i)=>{if(S.xp>=r[3]&&!S.rk.includes(i)){S.rk.push(i);S.coins+=r[4]}})}
+function pick(cat){const cats=cat==="mix"?Object.keys(CATS):[cat];const want=Math.min(4,Math.floor((info().l-1)/5));for(const d of[0,1,-1,2,-2,3,-3,4,-4]){const t=want+d;if(t<0||t>4)continue;const q=STATIC.filter(x=>x.t===t&&cats.includes(x.c)&&!done.has(x.id));if(q.length)return q[rnd(0,q.length-1)]}return null}
+function startQuiz(cat){catSel=cat;cur=pick(cat);fb=null;lock=false;if(!cur)scr="empty";else{opts=shuf([cur.a,...cur.w]);scr="quiz"}render()}
+function choose(i){if(lock||!cur||i<0||i>3||done.has(cur.id))return;lock=true;const q=cur,ok=opts[i]===q.a;done.add(q.id);S.done.push(q.id);S.answered++;let x=0,c=0;if(ok){S.correct++;if(!paid.has(q.id)){paid.add(q.id);S.paid.push(q.id);x=XPT[q.t];c=COINT[q.t];S.score+=x;award(x,c)}}save();fb={i,ok,x,c};beep(ok);render()}
+function setup(){return `<h1>🚀 Welcome to QuizNova</h1><p class="lab">Set up your player</p><label for="nm">Player name</label><input type="text" id="nm" maxlength="16" value="${esc(S.name==="Player"?"":S.name)}" placeholder="Player"><label for="lg">Preferred language</label><select id="lg">${Object.entries(LANGS).map(([k,v])=>`<option value="${k}"${S.lang===k?" selected":""}>${esc(v)}</option>`).join("")}</select><label for="co">Country</label><select id="co">${COUNTRIES.map(c=>`<option${S.country===c?" selected":""}>${esc(c)}</option>`).join("")}</select><div class="card"><small>Questions are currently available in English only.</small></div><button class="btn" data-a="cont">Continue</button>`}
+function home(){const I=info(),ri=rankIdx(),nx=RANKS[ri+1],ok=S.last!==fmt(new Date());return `<header class="hd">${av()}<div><b>${esc(S.name)}</b><div>${chip(ri)}<small> Level ${I.l}</small></div></div><div class="coin">🪙 ${S.coins}</div></header><div class="stats"><div><b>${S.xp}</b><small>Total XP</small></div><div><b>${S.score}</b><small>Score</small></div><div><b>${S.correct}</b><small>Correct</small></div></div><div class="lab">Level ${I.l} · ${I.r}/${I.n} XP</div>${bar(I.r/I.n)}<button class="btn" data-a="play" data-v="mix">▶ Play Quiz</button><h2>Categories</h2><div class="grid">${Object.entries(CATS).map(([k,v])=>`<button class="cat" data-a="play" data-v="${k}"><span>${v[1]}</span>${esc(v[0])}</button>`).join("")}</div><div class="card"><h3>🎁 Daily Reward</h3><p>Streak: <b>${S.streak}</b> day(s)</p>${ok?'<button class="btn" data-a="claim">Claim today\'s reward</button>':`<p class="lab">Claimed today. Next reward in <b>${cd()}</b></p>`}</div><div class="card"><h3>🏆 Rank progress</h3>${nx?`${chip(ri)} → ${chip(ri+1)}${bar((S.xp-RANKS[ri][3])/(nx[3]-RANKS[ri][3]))}<small>${S.xp}/${nx[3]} XP</small>`:`${chip(ri)} You reached the highest rank!`}</div>`}
+function quiz(){const q=cur,c=CATS[q.c],I=info();return `<div class="qh"><span class="chip">${c[1]} ${esc(c[0])}</span><span class="chip t${q.t}">${TIERS[q.t]}</span><span class="chip">Lv ${I.l}</span><span class="chip">Q #${fb?S.answered:S.answered+1}</span></div>${bar(I.r/I.n)}<div class="q"><span class="em">${q.e}</span>${esc(q.q)}</div>${opts.map((o,i)=>{let k="opt";if(fb){if(o===q.a)k+=" ok";else if(i===fb.i)k+=" bad"}return `<button class="${k}" data-a="ch" data-v="${i}"${fb?" disabled":""}><b>${"ABCD"[i]}</b>${esc(o)}</button>`}).join("")}${fb?`<div class="fb">${fb.ok?`✅ Correct! +${fb.x} XP · +${fb.c} 🪙`:"❌ Incorrect. No XP earned."}</div><button class="btn" data-a="next">Next Question →</button>`:'<p class="lab" style="text-align:center">Choose the correct answer.</p>'}<button class="btn alt" data-a="go" data-v="home">Exit to Home</button>`}
+function empty(){return `<div class="card" style="text-align:center"><div class="big">📭</div><h2>No new questions available</h2><p>You have answered every question available for this selection. Try another category.</p></div><button class="btn" data-a="play" data-v="mix">Try all categories</button><button class="btn alt" data-a="go" data-v="home">Back to Home</button>`}
+function ranks(){const ri=rankIdx();return `<h1>🏆 Ranks</h1><p class="lab">Total XP: ${S.xp}</p>`+RANKS.map((r,i)=>`<div class="card" style="border-color:${r[2]}"><div class="row"><span style="font-size:36px">${r[1]}</span><div><b style="color:${r[2]}">${r[0]}</b><br><small>Requires ${r[3]} XP · Reward 🪙 ${r[4]}</small></div><span>${i<=ri?"✅":"🔒"}</span></div>${bar(i<ri?1:i===ri?1:0)}</div>`).join("")}
+function prof(){const I=info(),ri=rankIdx(),acc=S.answered?Math.round(S.correct/S.answered*100):0;return `<h1>👤 Profile</h1><div class="hd">${av()}<div><b>${esc(S.name)}</b><div>${chip(ri)}</div></div></div><div class="stats"><div><b>${I.l}</b><small>Level</small></div><div><b>${S.xp}</b><small>XP</small></div><div><b>${S.coins}</b><small>Coins</small></div><div><b>${S.answered}</b><small>Answered</small></div><div><b>${S.correct}</b><small>Correct</small></div><div><b>${acc}%</b><small>Accuracy</small></div></div><div class="card"><h3>Settings</h3><label for="pl">Language</label><select id="pl" data-c="lang">${Object.entries(LANGS).map(([k,v])=>`<option value="${k}"${S.lang===k?" selected":""}>${esc(v)}</option>`).join("")}</select><label for="pc">Country</label><select id="pc" data-c="co">${COUNTRIES.map(c=>`<option${S.country===c?" selected":""}>${esc(c)}</option>`).join("")}</select><small>Questions are English-only for now.</small><p><label><input type="checkbox" data-c="snd"${S.snd?" checked":""}> Sound effects</label></p><p><label><input type="checkbox" data-c="anim"${S.anim?" checked":""}> Animations</label></p></div><div class="card"><h3>Backup</h3><button class="btn" data-a="exp">Export Progress Backup</button><label for="imp">Import Progress Backup (.json)</label><input type="file" id="imp" accept=".json,application/json" data-c="imp"></div><button class="btn alt" data-a="rsth">Reset Question History</button><button class="btn red" data-a="rsall">Reset All Progress</button>`}
+function claim(){const t=fmt(new Date());if(S.last===t)return;const n=new Date(),y=fmt(new Date(n.getFullYear(),n.getMonth(),n.getDate()-1));S.streak=S.last===y?S.streak+1:1;S.last=t;const k=Math.min(S.streak,7),c=40+20*(k-1),x=10*k;award(x,c);save();pop("🎁","Daily reward!","Day "+S.streak+": +"+c+" coins and +"+x+" XP");render()}
+function exp(){const b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="quiznova-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.v!==1||!Array.isArray(o.done)||!Array.isArray(o.paid))throw Error();if(!confirm("Importing replaces current progress. Continue?"))return;S={...DEF(),...o};rebuild();save();scr=S.setup?"home":"setup";render();toast("Backup imported")}catch(e){toast("Invalid backup file")}};r.readAsText(f)}
+function rsth(){if(!confirm("Reset question history? Rewards will not be given again for previously rewarded questions."))return;S.done=[];done.clear();save();toast("Question history reset")}
+function rsall(){if(!confirm("Delete all local progress?"))return;try{localStorage.removeItem(KEY)}catch(e){}S=DEF();rebuild();scr="setup";render()}
+const ACT={go:v=>{scr=v;render()},play:v=>startQuiz(CATS[v]?v:"mix"),ch:v=>choose(+v),next:()=>startQuiz(catSel),ok:closePop,claim,exp,rsth,rsall,cont:()=>{S.name=$("#nm").value.trim().slice(0,16)||"Player";S.lang=$("#lg").value;S.country=$("#co").value;S.setup=true;save();scr="home";render()}};
+const CH={lang:v=>{if(LANGS[v])S.lang=v;save()},co:v=>{if(COUNTRIES.includes(v))S.country=v;save()},snd:(v,e)=>{S.snd=e.checked;save()},anim:(v,e)=>{S.anim=e.checked;document.body.classList.toggle("na",!S.anim);save()},imp:(v,e)=>{imp(e.files[0]);e.value=""}};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const fn=ACT[b.dataset.a];if(fn)fn(b.dataset.v)});
+document.addEventListener("change",e=>{const b=e.target.closest("[data-c]");if(!b)return;const fn=CH[b.dataset.c];if(fn)fn(b.value,b)});
+document.addEventListener("keydown",e=>{if(scr!=="quiz"||$("#modal").classList.contains("on"))return;if(!fb&&"1234".includes(e.key))choose(+e.key-1);else if(fb&&e.key.toLowerCase()==="n")startQuiz(catSel)});
+function render(){document.body.classList.toggle("na",!S.anim);$("#app").innerHTML=({setup,home,quiz,empty,ranks,prof})[scr]?.()||home();$("#nav").style.display=["home","ranks","prof"].includes(scr)?"flex":"none";document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===scr));if(scr!==lastScr){window.scrollTo(0,0);lastScr=scr}}
+S=load();rebuild();scr=S.setup?"home":"setup";render();
+})();
 </script>
 </body>
-  </html>
+</html>
