@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6C5CE7">
+<meta name="mobile-web-app-capable" content="yes">
+<title>QuizNova</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%236C5CE7'/><text x='50' y='68' font-size='55' text-anchor='middle'>🚀</text></svg>">
+<style>
+:root{--bg:#f4f3ff;--card:#fff;--text:#1e1b3a;--muted:#6b6890;--ok:#22a06b;--bad:#e5484d;--line:#e2e0f5}
+@media(prefers-color-scheme:dark){:root{--bg:#15132b;--card:#221f42;--text:#f1f0ff;--muted:#a9a6cf;--line:#38345f}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.app{max-width:480px;margin:0 auto;padding:20px 16px 32px}
+h1{margin:8px 0 4px;font-size:30px}
+.sub{color:var(--muted);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat{border:0;border-radius:20px;padding:22px 12px;color:#fff;font-size:17px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:transform .12s}
+.cat:active{transform:scale(.95)}
+.cat span{font-size:38px}
+.cat:last-child:nth-child(odd){grid-column:1/-1}
+.top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-weight:600;margin-bottom:10px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin-bottom:22px}
+.bar i{display:block;height:100%;width:0;background:var(--c,#6C5CE7);transition:width .3s}
+.q{background:var(--card);border-radius:20px;padding:22px;font-size:20px;font-weight:700;line-height:1.35;margin-bottom:16px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--text);border:2px solid var(--line);border-radius:16px;padding:16px;font-size:17px;margin-bottom:10px;cursor:pointer}
+.opt:active{transform:scale(.98)}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.fb{min-height:26px;font-weight:700;text-align:center;margin:6px 0 10px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font-size:18px;font-weight:700;color:#fff;background:#6C5CE7;cursor:pointer;margin-top:10px}
+.btn.alt{background:transparent;color:var(--text);border:2px solid var(--line)}
+.res{text-align:center;padding-top:30px}
+.big{font-size:72px;margin:0}
+.score{font-size:56px;font-weight:800;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+// Each question: [question, correct answer, wrong1, wrong2, wrong3]
+const CATS=[
+{name:"Science",icon:"🔬",color:"#6C5CE7",qs:[
+["Which planet is known as the Red Planet?","Mars","Venus","Jupiter","Mercury"],
+["What is the chemical symbol for water?","H₂O","CO₂","O₂","NaCl"],
+["Which gas do plants absorb from the air?","Carbon dioxide","Oxygen","Nitrogen","Helium"],
+["What is the hardest natural substance?","Diamond","Gold","Iron","Quartz"],
+["How many bones are in an adult human body?","206","180","250","300"]]},
+{name:"Geography",icon:"🌍",color:"#00A884",qs:[
+["What is the capital of France?","Paris","Rome","Madrid","Berlin"],
+["Which is the largest ocean?","Pacific","Atlantic","Indian","Arctic"],
+["Which is the largest country by area?","Russia","Canada","China","USA"],
+["Mount Everest is in which mountain range?","Himalayas","Alps","Andes","Rockies"],
+["What is the capital of Japan?","Tokyo","Seoul","Beijing","Bangkok"]]},
+{name:"History",icon:"🏛️",color:"#E17055",qs:[
+["Who was the first US president?","George Washington","Abraham Lincoln","Thomas Jefferson","John Adams"],
+["The pyramids of Giza are in which country?","Egypt","Mexico","Iraq","Peru"],
+["In which year did World War II end?","1945","1939","1918","1950"],
+["Who sailed to the Americas in 1492?","Christopher Columbus","Marco Polo","Vasco da Gama","James Cook"],
+["Which language was spoken in ancient Rome?","Latin","Greek","Arabic","Sanskrit"]]},
+{name:"Technology",icon:"💻",color:"#0984E3",qs:[
+["What does HTML stand for?","HyperText Markup Language","High Tech Modern Language","Home Tool Markup Language","Hyper Transfer Mode Link"],
+["Which company develops Android?","Google","Apple","Microsoft","Nokia"],
+["What does CPU stand for?","Central Processing Unit","Computer Power Unit","Central Program Utility","Core Phone Unit"],
+["What animal is the Linux mascot?","Penguin","Fox","Dolphin","Owl"],
+["How many bits are in one byte?","8","4","16","10"]]},
+{name:"Fun Facts",icon:"🎉",color:"#D63384",qs:[
+["How many days are in a leap year?","366","365","364","367"],
+["How many colors are in a rainbow?","7","5","6","8"],
+["What is the largest mammal?","Blue whale","Elephant","Giraffe","Hippo"],
+["How many sides does a hexagon have?","6","5","7","8"],
+["What is the fastest land animal?","Cheetah","Lion","Horse","Leopard"]]}
+];
+
+const app=document.getElementById("app");
+let cat,list,idx,score,locked;
+
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+function home(){
+  app.innerHTML=`<h1>🚀 QuizNova</h1><p class="sub">Pick a category and test yourself!</p>
+  <div class="grid">${CATS.map((c,i)=>`<button class="cat" style="background:${c.color}" onclick="start(${i})"><span>${c.icon}</span>${c.name}</button>`).join("")}</div>`;
+}
+
+function start(i){
+  cat=CATS[i];
+  list=shuffle(cat.qs);
+  idx=0;score=0;
+  show();
+}
+
+function show(){
+  locked=false;
+  const [q,right,...wrong]=list[idx];
+  const opts=shuffle([right,...wrong]);
+  app.style.setProperty("--c",cat.color);
+  app.innerHTML=`<div class="top"><span>${cat.icon} ${cat.name}</span><span>Question ${idx+1}/${list.length}</span></div>
+  <div class="bar"><i style="width:${idx/list.length*100}%"></i></div>
+  <div class="q"></div>
+  <div id="opts"></div><div class="fb" id="fb"></div><div id="nx"></div>`;
+  app.querySelector(".q").textContent=q;
+  const box=document.getElementById("opts");
+  opts.forEach(o=>{
+    const b=document.createElement("button");
+    b.className="opt";b.textContent=o;
+    b.onclick=()=>answer(b,o===right,right);
+    box.appendChild(b);
+  });
+  requestAnimationFrame(()=>app.querySelector(".bar i").style.width=((idx+1)/list.length*100)+"%");
+}
+
+function answer(btn,correct,right){
+  if(locked)return;
+  locked=true;
+  document.querySelectorAll(".opt").forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===right)b.classList.add("ok");
+  });
+  const fb=document.getElementById("fb");
+  if(correct){score++;fb.textContent="✅ Correct!";fb.style.color="var(--ok)";if(navigator.vibrate)navigator.vibrate(40)}
+  else{btn.classList.add("bad");fb.textContent="❌ Wrong! The answer is: "+right;fb.style.color="var(--bad)";if(navigator.vibrate)navigator.vibrate([60,40,60])}
+  const last=idx===list.length-1;
+  document.getElementById("nx").innerHTML=`<button class="btn" style="background:${cat.color}" onclick="next()">${last?"See Score 🏁":"Next Question →"}</button>`;
+}
+
+function next(){
+  idx++;
+  idx<list.length?show():result();
+}
+
+function result(){
+  const pct=score/list.length;
+  const [emoji,msg]=pct===1?["🏆","Perfect! You're a QuizNova champion!"]:pct>=.6?["🎉","Great job!"]:pct>=.4?["👍","Not bad, keep practicing!"]:["📚","Keep learning, you'll get there!"];
+  app.innerHTML=`<div class="res"><p class="big">${emoji}</p><h1>Quiz Complete</h1><p class="sub">${cat.name} • ${msg}</p>
+  <div class="score" style="color:${cat.color}">${score} / ${list.length}</div>
+  <p class="sub">${Math.round(pct*100)}% correct</p>
+  <button class="btn" style="background:${cat.color}" onclick="start(CATS.indexOf(cat))">🔄 Play Again</button>
+  <button class="btn alt" onclick="home()">🏠 Choose Another Category</button></div>`;
+}
+
+home();
+</script>
+</body>
+  </html>
